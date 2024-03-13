@@ -22,6 +22,6 @@ const mentorSchema = new Schema({
     }
 });
 
-const Mentor = mongoose.model('Teacher', teacherSchema);
+const Mentor = mongoose.model('Mentor', mentorSchema);
 
 module.exports = Mentor;
