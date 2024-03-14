@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const mentorSchema = new Schema({
     mentor_id: {
-        type: String,
+        type: Number,
         required: true,
         unique: true
     },
