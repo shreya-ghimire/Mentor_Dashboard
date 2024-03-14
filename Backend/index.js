@@ -7,6 +7,7 @@ const Teacher = require('./Model/mentorModel');
 const Student = require('./Model/studentModel');
 const Evaluation = require('./Model/evaluationModel');
 const { addEvaluationDataForAllStudents } = require('./evaluationController');
+const {sendEmail}=require('./sendEmail');
 
 const app = express();
 const PORT = 5000;
@@ -107,6 +108,20 @@ app.post('/evaluation', async (req, res) => {
   }
 });
 
+app.post('/send-email', async (req, res) => {
+  const { studentEmail, totalScore } = req.body;
+
+  try {
+    // Call the sendEmail function here
+    await sendEmail(studentEmail, totalScore);
+    
+    res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: 'An error occurred while sending the email' });
+  }
+});
+
 
 
 
@@ -140,11 +155,11 @@ app.put('/evaluation/assign', async (req, res) => {
 // PUT endpoint to update evaluation form
 app.put('/evaluation/update', async (req, res) => {
   try {
-    const { student_id, ideation, execution, vivaPitch, evaluation_locked } = req.body;
+    const { student_id, ideation, execution, viva_pitch, total_score, evaluation_locked} = req.body;
     console.log(req.body);
     const evaluation = await Evaluation.findOneAndUpdate(
       { student_id: student_id },
-      { ideation, execution, vivaPitch, evaluation_locked },
+      { ideation, execution, viva_pitch,total_score, evaluation_locked},
       { new: true }
     );
 
@@ -186,6 +201,7 @@ app.get('/student', async (req, res) => {
     console.error('Error fetching students:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
+  app.post('/evaluation');
 });
 app.get('/evaluation', async (req, res) => {
   try {

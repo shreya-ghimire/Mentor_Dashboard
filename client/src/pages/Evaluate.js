@@ -6,11 +6,12 @@ const Evaluate = () => {
   const { student_id } = useParams();
   const [ideation, setIdeation] = useState(0);
   const [execution, setExecution] = useState(0);
-  const [vivaPitch, setVivaPitch] = useState(0);
+  const [viva_pitch, setVivaPitch] = useState(0);
   const [projectUrl, setProjectUrl] = useState('');
+  const [email, setEmail] = useState('');
   const [evaluationLocked, setEvaluationLocked] = useState(false);
   const [evaluationSaved, setEvaluationSaved] = useState(false);
-  const [totalScore, setTotalScore] = useState(0);
+  const [total_score, setTotalScore] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -23,6 +24,7 @@ const Evaluate = () => {
       const studentData = studentResponse.data.find(student => student.student_id === parseInt(student_id));
       if (studentData) {
         setProjectUrl(studentData.project);
+        setEmail(studentData.email);
       }
 
       // Fetch evaluation details
@@ -33,6 +35,7 @@ const Evaluate = () => {
         setExecution(evaluationData.execution);
         setVivaPitch(evaluationData.viva_pitch);
         setEvaluationLocked(evaluationData.evaluation_locked);
+        setTotalScore(evaluationData.total_score);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -50,16 +53,19 @@ const Evaluate = () => {
         student_id,
         ideation,
         execution,
-        vivaPitch,
-        evaluation_locked: evaluationLocked || evaluationSaved  // Form cannot be locked if not saved
+        viva_pitch,
+        total_score,
+        evaluation_locked: evaluationLocked && evaluationSaved,
       });
+
       setEvaluationSaved(true);
     } catch (error) {
       console.error('Error saving form:', error);
     }
   };
-
-  const handleLockForm = () => {
+  
+  
+  const handleLockForm = async (studentEmail) => {
     // Check if the form has been saved
     if (!evaluationSaved) {
       alert('Please save the form before locking.');
@@ -67,20 +73,44 @@ const Evaluate = () => {
     }
   
     // Check if any evaluation criteria is set to 0 or unassigned
-    if (ideation === '' || execution === '' || vivaPitch === '') {
-      alert('Form cannot be locked if any evaluation criteria is unassigned.');
+    if (ideation === 0 || execution === 0 || viva_pitch === 0) {
+      alert('Form cannot be locked if any evaluation criteria is set to 0 or unassigned.');
       return;
     }
   
     // If all conditions are met, lock the form
     setEvaluationLocked(true);
+  
+    try {
+      // Update evaluation with the new locked status
+      await axios.put(`http://localhost:5000/evaluation/update/`, {
+        student_id,
+        ideation,
+        execution,
+        viva_pitch,
+        total_score,
+        evaluation_locked: true, // Set to true when locking
+      });
+      
+      // Call the backend endpoint to send email
+      await axios.post(`http://localhost:5000/send-email`, {
+        studentEmail: studentEmail,
+        totalScore: total_score
+      });
+  
+      console.log('Evaluation form locked.');
+    } catch (error) {
+      console.error('Error locking form:', error);
+    }
   };
+  
+  
 
   // Calculate total score
   useEffect(() => {
-    const total = parseInt(ideation) + parseInt(execution) + parseInt(vivaPitch);
+    const total = parseInt(ideation) + parseInt(execution) + parseInt(viva_pitch);
     setTotalScore(total);
-  }, [ideation, execution, vivaPitch]);
+  }, [ideation, execution, viva_pitch]);
 
   // Check if marks are greater than 10
   const handleInputChange = (e, setter) => {
@@ -101,11 +131,12 @@ const Evaluate = () => {
         <label>Execution:</label>
         <input type="number" value={execution} onChange={(e) => handleInputChange(e, setExecution)} disabled={evaluationLocked} /><br />
         <label>Viva Pitch:</label>
-        <input type="number" value={vivaPitch} onChange={(e) => handleInputChange(e, setVivaPitch)} disabled={evaluationLocked} /><br />
+        <input type="number" value={viva_pitch} onChange={(e) => handleInputChange(e, setVivaPitch)} disabled={evaluationLocked} /><br />
         <label>Total Score:</label>
-        <input type="text" value={totalScore} readOnly /><br />
+        <input type="text" value={total_score} readOnly /><br />
         <button type="button" onClick={handleSaveForm}>Save</button>
-        <button type="button" onClick={handleLockForm} disabled={evaluationLocked || !evaluationSaved}>Lock</button>
+        <button type="button" onClick={() => handleLockForm(email)} disabled={evaluationLocked || !evaluationSaved}>Lock</button>
+
       </form>
     </div>
   );

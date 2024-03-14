@@ -34,19 +34,22 @@ const StudentList = ({ mentor }) => {
   };
 
   const renderStudentList = () => {
-    return students.map(student => {
-      if (filter === 'all' || (filter === 'assigned' && student.evaluation && student.evaluation.teacher_id !== 0)) {
-        return (
-          <div key={student.student_id}>
-            {/* Render student name or link based on mentor assignment */}
-            {renderStudentLink(student)}
-            {/* Render buttons based on evaluation status */}
-            {renderButtons(student)}
-          </div>
-        );
-      }
-      return null;
-    });
+    let filteredStudents = students;
+
+    if (filter === 'assigned') {
+      filteredStudents = students.filter(student => student.evaluation && student.evaluation.teacher_id === mentor.mentor_id);
+    } else if (filter === 'locked') {
+      filteredStudents = students.filter(student => student.evaluation && student.evaluation.evaluation_locked);
+    }
+
+    return filteredStudents.map(student => (
+      <div key={student.student_id}>
+        {/* Render student name or link based on mentor assignment */}
+        {renderStudentLink(student)}
+        {/* Render buttons based on evaluation status */}
+        {renderButtons(student)}
+      </div>
+    ));
   };
 
   const renderStudentLink = (student) => {
@@ -118,13 +121,15 @@ const StudentList = ({ mentor }) => {
           </Link>
         </>
       );
+    } else if (evaluation.teacher_id !== mentor.mentor_id && evaluation.teacher_id !== 0) {
+      return <p>Unavailable</p>;
     } else if (evaluation.evaluation_locked) {
-      return <p>Locked</p>;
+      return <p>Total marks: {evaluation.total_score}</p>;
     } else {
       return null;
     }
   };
-  
+
   const handleRemoveStudent = async (studentId) => {
     try {
       const requestBody = {
@@ -140,16 +145,13 @@ const StudentList = ({ mentor }) => {
     }
   };
 
-  
-
   return (
     <div>
-      {/* Filter Buttons */}
       <div>
         <button onClick={() => handleFilterChange('all')}>All Students</button>
-        <button onClick={() => handleFilterChange('assigned')}>Assigned Students</button>
+        <button onClick={() => handleFilterChange('assigned')}>Your Students</button>
+        <button onClick={() => handleFilterChange('locked')}>Locked Students</button>
       </div>
-      {/* Student List */}
       {renderStudentList()}
     </div>
   );
