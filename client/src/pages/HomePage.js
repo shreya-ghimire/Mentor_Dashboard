@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar'; // Make sure the filename matches
@@ -14,12 +12,18 @@ const HomePage = () => {
   };
 
   // Dummy mentor data (to be replaced with actual mentor data after implementing authentication)
-  const mentor = { id: 1, name: "John Doe" };
+  const mentor = {
+        mentor_id:1,
+        name:"Ravi Kumar",
+        email:"ravi.kumar@example.com",
+        password:"hashedPassword1"
+
+  }
 
   return (
     <div>
       <Navbar mentor={mentor} onLogout={handleLogout} />
-      <StudentList />
+      <StudentList mentor={mentor} />
     </div>
   );
 };

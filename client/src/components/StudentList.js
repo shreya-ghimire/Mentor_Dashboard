@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
-const StudentList = () => {
+const StudentList = ({ mentor }) => {
   const [students, setStudents] = useState([]);
-  const [filter, setFilter] = useState('all'); // 'all' or 'assigned'
+  const [filter, setFilter] = useState('all');
 
   useEffect(() => {
     fetchStudents();
@@ -13,11 +14,10 @@ const StudentList = () => {
     try {
       const studentsResponse = await axios.get('http://localhost:5000/student');
       const evaluationsResponse = await axios.get('http://localhost:5000/evaluation');
-      
+
       const studentsData = studentsResponse.data;
       const evaluationsData = evaluationsResponse.data;
 
-      // Merge student data with evaluation data
       const mergedData = studentsData.map(student => {
         const evaluation = evaluationsData.find(evaluation => evaluation.student_id === student.student_id);
         return { ...student, evaluation };
@@ -38,7 +38,8 @@ const StudentList = () => {
       if (filter === 'all' || (filter === 'assigned' && student.evaluation && student.evaluation.teacher_id !== 0)) {
         return (
           <div key={student.student_id}>
-            <p>{student.name}</p>
+            {/* Render student name or link based on mentor assignment */}
+            {renderStudentLink(student)}
             {/* Render buttons based on evaluation status */}
             {renderButtons(student)}
           </div>
@@ -48,36 +49,98 @@ const StudentList = () => {
     });
   };
 
-  const renderButtons = (student) => {
-    const { evaluation } = student;
-    if (!evaluation) {
-      return <button onClick={() => handleAssignStudent(student.student_id)}>Assign</button>;
-    } else if (evaluation.teacher_id === 0) {
-      return <button onClick={() => handleAssignStudent(student.student_id)}>Assign</button>;
-    } else if (evaluation.teacher_id !== 0 && !evaluation.evaluation_locked) {
-      return <button onClick={() => handleRemoveStudent(student.student_id)}>Remove</button>;
-    } else if (evaluation.evaluation_locked) {
-      return <p>Locked</p>;
+  const renderStudentLink = (student) => {
+    if (mentorAssignedToStudent(student)) {
+      return (
+        <Link to={`/evaluation/${student.student_id}`}>
+          <p>{student.name}</p>
+        </Link>
+      );
+    } else {
+      return (
+        <div>
+          <p>{student.name}</p>
+        </div>
+      );
     }
+  };
+
+  const mentorAssignedToStudent = (student) => {
+    return student.evaluation && student.evaluation.teacher_id === mentor.mentor_id;
   };
 
   const handleAssignStudent = async (studentId) => {
     try {
-      await axios.put(`http://localhost:5000/student/${studentId}`, { teacher_id: 0 });
-      fetchStudents(); // Refresh student list after update
+      const response = await axios.get(`http://localhost:5000/evaluation?teacher_id=${mentor.mentor_id}`);
+      const assignedStudents = response.data.filter(evaluation => evaluation.teacher_id === mentor.mentor_id);
+
+      if (assignedStudents.length < 3) {
+        alert(`You need to add minimum 3 students`);
+      }
+      if (assignedStudents.length >= 4) {
+        alert('Maximum student assigned');
+        return;
+      }
+
+      const requestBody = {
+        student_id: studentId,
+        teacher_id: mentor.mentor_id
+      };
+
+      await axios.put('http://localhost:5000/evaluation/assign', requestBody);
+
+      fetchStudents();
     } catch (error) {
       console.error('Error assigning student:', error);
     }
   };
 
-  const handleRemoveStudent = async (studentId) => {
-    try {
-      await axios.put(`http://localhost:5000/student/${studentId}`, { teacher_id: null });
-      fetchStudents(); // Refresh student list after update
-    } catch (error) {
-      console.error('Error removing student:', error);
+  const renderButtons = (student) => {
+    const { evaluation } = student;
+    if (!evaluation) {
+      return (
+        <>
+          <button onClick={() => handleAssignStudent(student.student_id)}>Assign</button>
+        </>
+      );
+    } else if (evaluation.teacher_id === 0) {
+      return (
+        <>
+          <button onClick={() => handleAssignStudent(student.student_id)}>Assign</button>
+        </>
+      );
+    } else if (evaluation.teacher_id === mentor.mentor_id && !evaluation.evaluation_locked) {
+      return (
+        <>
+          <button onClick={() => handleRemoveStudent(student.student_id)}>Remove</button>
+          <Link to={`/evaluation/${student.student_id}`}>
+            <button>Evaluate</button>
+          </Link>
+        </>
+      );
+    } else if (evaluation.evaluation_locked) {
+      return <p>Locked</p>;
+    } else {
+      return null;
     }
   };
+  
+  const handleRemoveStudent = async (studentId) => {
+    try {
+      const requestBody = {
+        student_id: studentId,
+        teacher_id: 0
+      };
+
+      await axios.put('http://localhost:5000/evaluation/assign', requestBody);
+
+      fetchStudents();
+    } catch (error) {
+      console.error('Error assigning student:', error);
+    }
+  };
+
+  
 
   return (
     <div>

@@ -9,7 +9,7 @@ const evaluationSchema = new Schema({
     teacher_id: {
         type: Number,
         ref: 'Teacher',
-        default: null
+        default: 0
     },
     ideation: {
         type: Number,

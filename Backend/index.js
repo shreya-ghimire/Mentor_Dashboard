@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 const Teacher = require('./Model/mentorModel');
 const Student = require('./Model/studentModel');
@@ -12,6 +13,7 @@ const PORT = 5000;
 
 app.use(express.json());
 app.use(cors());
+app.use(bodyParser.json());
 
 mongoose.connect('mongodb+srv://shreya:asdf@cluster1.jjrojry.mongodb.net/mentor_database', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
@@ -80,7 +82,6 @@ app.post('/student', async (req, res) => {
 
 app.post('/evaluation', async (req, res) => {
   try {
-    console.log("haaa");
     await addEvaluationDataForAllStudents();
 
     const { student_id, teacher_id, ideation, execution, viva_pitch, total_score, evaluation_locked } = req.body;
@@ -106,7 +107,66 @@ app.post('/evaluation', async (req, res) => {
   }
 });
 
-// Route for fetching mentors
+
+
+
+
+// PUT endpoint to update mentor ID
+// PUT endpoint to assign teacher to a student
+app.put('/evaluation/assign', async (req, res) => {
+  const { student_id, teacher_id } = req.body;
+  console.log(req.body);
+
+  try {
+    let evaluation = await Evaluation.findOne({ student_id });
+
+    if (!evaluation) {
+      return res.status(404).json({ error: 'Evaluation not found' });
+    }
+    
+    evaluation.teacher_id = teacher_id;
+    await evaluation.save();
+
+    evaluation = await Evaluation.findById(evaluation._id);
+
+    return res.status(200).json({ message: 'Teacher assigned successfully', data: evaluation });
+  } catch (err) {
+    console.error('Error assigning teacher to student:', err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+// PUT endpoint to update evaluation form
+app.put('/evaluation/update', async (req, res) => {
+  try {
+    const { student_id, ideation, execution, vivaPitch, evaluation_locked } = req.body;
+    console.log(req.body);
+    const evaluation = await Evaluation.findOneAndUpdate(
+      { student_id: student_id },
+      { ideation, execution, vivaPitch, evaluation_locked },
+      { new: true }
+    );
+
+    if (!evaluation) {
+      return res.status(404).json({ error: 'Evaluation not found' });
+    }
+
+    res.json(evaluation);
+  } catch (error) {
+    console.error('Error updating evaluation form:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
+
+
+
+
+
+
 app.get('/mentor', async (req, res) => {
   try {
     const mentors = await Teacher.find();
@@ -127,8 +187,6 @@ app.get('/student', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-
-// Route for fetching evaluations
 app.get('/evaluation', async (req, res) => {
   try {
     const evaluations = await Evaluation.find();
