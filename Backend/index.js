@@ -6,8 +6,10 @@ const cors = require('cors');
 const Teacher = require('./Model/mentorModel');
 const Student = require('./Model/studentModel');
 const Evaluation = require('./Model/evaluationModel');
+const fs = require('fs');
 const { addEvaluationDataForAllStudents } = require('./evaluationController');
-const {sendEmail}=require('./sendEmail');
+const { sendEmail } = require('./sendEmail');
+const { generateEvaluationPDF } = require('./Pdf/generateEvaluationPDF');
 
 const app = express();
 const PORT = 5000;
@@ -15,8 +17,13 @@ const PORT = 5000;
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static('public'));
 
-mongoose.connect('mongodb+srv://shreya:asdf@cluster1.jjrojry.mongodb.net/mentor_database', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose
+  .connect('mongodb+srv://shreya:asdf@cluster1.jjrojry.mongodb.net/mentor_database', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   .then(() => {
     console.log('Connected to MongoDB');
   })
@@ -51,15 +58,12 @@ app.post('/student', async (req, res) => {
   try {
     const { name, email, batch, section, project } = req.body;
 
-    // Last entry
     const lastStudent = await Student.findOne().sort({ student_id: -1 });
 
     let student_id;
     if (lastStudent) {
-      // Assigning ID to new student submission
       student_id = parseInt(lastStudent.student_id) + 1;
     } else {
-      // If schema is empty
       student_id = 1;
     }
 
@@ -87,7 +91,6 @@ app.post('/evaluation', async (req, res) => {
 
     const { student_id, teacher_id, ideation, execution, viva_pitch, total_score, evaluation_locked } = req.body;
 
-
     const evaluation = new Evaluation({
       student_id,
       teacher_id,
@@ -97,7 +100,6 @@ app.post('/evaluation', async (req, res) => {
       total_score,
       evaluation_locked
     });
-
 
     await evaluation.save();
 
@@ -112,9 +114,8 @@ app.post('/send-email', async (req, res) => {
   const { studentEmail, totalScore } = req.body;
 
   try {
-    // Call the sendEmail function here
     await sendEmail(studentEmail, totalScore);
-    
+
     res.status(200).json({ message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);
@@ -122,12 +123,62 @@ app.post('/send-email', async (req, res) => {
   }
 });
 
+const path = require('path');
+
+app.post('/evaluate', async (req, res) => {
+  try {
+    const studentEmail = req.body.email;
+
+    const student = await Student.findOne({ email: studentEmail });
+
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    const evaluation = await Evaluation.findOne({ student_id: student.student_id });
+
+    if (!evaluation) {
+      return res.status(404).json({ message: 'Evaluation not found' });
+    }
+
+    if (evaluation.evaluation_locked) {
+      // Generate a unique file name (e.g., using timestamp)
+      const fileName = `evaluation.pdf`;
+
+      // Construct the file path relative to the 'download' directory
+      const pdfFilePath = path.join(__dirname, fileName);
+
+      // Generate the PDF with the specified file path
+      const pdfData = await generateEvaluationPDF(student, evaluation, pdfFilePath);
+
+      // No need to call savePDFtoFile function here
+
+      // Set content disposition to attachment to force download
+      res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+      res.contentType('application/pdf');
+      res.send(pdfData);
+    } else {
+      return res.status(403).json({ message: 'Evaluation is not locked' });
+    }
+  } catch (error) {
+    console.error('Error processing evaluation form:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 
 
+// Function to save PDF data to a file
+function savePDFtoFile(pdfData) {
+  fs.writeFile('generated.pdf', pdfData, (err) => {
+    if (err) {
+      console.error('Error writing PDF file:', err);
+    } else {
+      console.log('PDF file saved successfully.');
+    }
+  });
+}
 
-// PUT endpoint to update mentor ID
-// PUT endpoint to assign teacher to a student
 app.put('/evaluation/assign', async (req, res) => {
   const { student_id, teacher_id } = req.body;
   console.log(req.body);
@@ -138,7 +189,7 @@ app.put('/evaluation/assign', async (req, res) => {
     if (!evaluation) {
       return res.status(404).json({ error: 'Evaluation not found' });
     }
-    
+
     evaluation.teacher_id = teacher_id;
     await evaluation.save();
 
@@ -151,15 +202,13 @@ app.put('/evaluation/assign', async (req, res) => {
   }
 });
 
-
-// PUT endpoint to update evaluation form
 app.put('/evaluation/update', async (req, res) => {
   try {
-    const { student_id, ideation, execution, viva_pitch, total_score, evaluation_locked} = req.body;
+    const { student_id, ideation, execution, viva_pitch, total_score, evaluation_locked } = req.body;
     console.log(req.body);
     const evaluation = await Evaluation.findOneAndUpdate(
       { student_id: student_id },
-      { ideation, execution, viva_pitch,total_score, evaluation_locked},
+      { ideation, execution, viva_pitch, total_score, evaluation_locked },
       { new: true }
     );
 
@@ -174,14 +223,6 @@ app.put('/evaluation/update', async (req, res) => {
   }
 });
 
-
-
-
-
-
-
-
-
 app.get('/mentor', async (req, res) => {
   try {
     const mentors = await Teacher.find();
@@ -192,7 +233,6 @@ app.get('/mentor', async (req, res) => {
   }
 });
 
-// Route for fetching students
 app.get('/student', async (req, res) => {
   try {
     const students = await Student.find();
@@ -201,8 +241,8 @@ app.get('/student', async (req, res) => {
     console.error('Error fetching students:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-  app.post('/evaluation');
 });
+
 app.get('/evaluation', async (req, res) => {
   try {
     const evaluations = await Evaluation.find();
@@ -213,7 +253,6 @@ app.get('/evaluation', async (req, res) => {
   }
 });
 
-// Start the server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
