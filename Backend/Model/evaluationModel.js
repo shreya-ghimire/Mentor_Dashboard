@@ -3,11 +3,11 @@ const Schema = mongoose.Schema;
 
 const evaluationSchema = new Schema({
     student_id: {
-        type: Schema.Types.ObjectId,
+        type: Number,
         ref: 'Student'
     },
     teacher_id: {
-        type: Schema.Types.ObjectId,
+        type: Number,
         ref: 'Teacher',
         default: null
     },

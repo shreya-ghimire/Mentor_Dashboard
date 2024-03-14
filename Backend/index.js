@@ -5,14 +5,13 @@ const cors = require('cors');
 const Teacher = require('./Model/mentorModel');
 const Student = require('./Model/studentModel');
 const Evaluation = require('./Model/evaluationModel');
+const { addEvaluationDataForAllStudents } = require('./evaluationController');
 
 const app = express();
 const PORT = 5000;
 
-
-app.use(express.json()); 
-app.use(cors()); 
-
+app.use(express.json());
+app.use(cors());
 
 mongoose.connect('mongodb+srv://shreya:asdf@cluster1.jjrojry.mongodb.net/mentor_database', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
@@ -22,7 +21,7 @@ mongoose.connect('mongodb+srv://shreya:asdf@cluster1.jjrojry.mongodb.net/mentor_
     console.error('Error connecting to MongoDB:', err);
   });
 
-
+// Route for registering a mentor
 app.post('/mentor', async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -44,10 +43,22 @@ app.post('/mentor', async (req, res) => {
   }
 });
 
-
+// Route for registering a student
 app.post('/student', async (req, res) => {
   try {
-    const { student_id, name, email, batch, section, project } = req.body;
+    const { name, email, batch, section, project } = req.body;
+
+    // Last entry
+    const lastStudent = await Student.findOne().sort({ student_id: -1 });
+
+    let student_id;
+    if (lastStudent) {
+      // Assigning ID to new student submission
+      student_id = parseInt(lastStudent.student_id) + 1;
+    } else {
+      // If schema is empty
+      student_id = 1;
+    }
 
     const student = new Student({
       student_id,
@@ -67,10 +78,13 @@ app.post('/student', async (req, res) => {
   }
 });
 
-
 app.post('/evaluation', async (req, res) => {
   try {
+    console.log("haaa");
+    await addEvaluationDataForAllStudents();
+
     const { student_id, teacher_id, ideation, execution, viva_pitch, total_score, evaluation_locked } = req.body;
+
 
     const evaluation = new Evaluation({
       student_id,
@@ -82,6 +96,7 @@ app.post('/evaluation', async (req, res) => {
       evaluation_locked
     });
 
+
     await evaluation.save();
 
     res.status(201).json({ message: 'Evaluation submitted successfully' });
@@ -91,7 +106,7 @@ app.post('/evaluation', async (req, res) => {
   }
 });
 
-
+// Route for fetching mentors
 app.get('/mentor', async (req, res) => {
   try {
     const mentors = await Teacher.find();
@@ -102,7 +117,7 @@ app.get('/mentor', async (req, res) => {
   }
 });
 
-
+// Route for fetching students
 app.get('/student', async (req, res) => {
   try {
     const students = await Student.find();
@@ -113,7 +128,7 @@ app.get('/student', async (req, res) => {
   }
 });
 
-
+// Route for fetching evaluations
 app.get('/evaluation', async (req, res) => {
   try {
     const evaluations = await Evaluation.find();
