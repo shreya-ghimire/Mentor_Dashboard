@@ -5,10 +5,9 @@ async function addEvaluationDataForAllStudents() {
   try {
     const students = await Student.find();
 
-
-    students.forEach(async (student) => {
+    for (const student of students) {
       try {
-
+        // Check if evaluation entry already exists for the student
         const existingEvaluation = await Evaluation.findOne({ student_id: student.student_id });
 
         // If evaluation entry doesn't exist, create a new one
@@ -29,7 +28,7 @@ async function addEvaluationDataForAllStudents() {
       } catch (error) {
         console.error(`Error adding evaluation data for student with ID ${student.student_id}:`, error);
       }
-    });
+    }
 
     console.log('Evaluation data added for all students.');
   } catch (error) {

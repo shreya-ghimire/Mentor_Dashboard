@@ -22,7 +22,7 @@ h1 {
 }
 
 .view_btn {
-    width: 80%; 
+    width: 200px; 
     height: 50px; 
     font-size: 16px; 
     align-self: center;
@@ -30,24 +30,30 @@ h1 {
 
 .button_evaluate {
     display: block;
-    width: 100%;
+    width: 200px;
     background-color: #b99976;
     color: white;
     border: none;
     border-radius: 5px;
     padding: 12px;
     margin-top: 20px;
+    margin-bottom: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-button:hover {
+.button_evaluate:hover {
     background-color: #987554;
 }
 
 .form_evaluate {
     margin-top: 20px;
     text-align: left;
+}
+.form_evaluate input{
+    width: 200px;
+    height: 30px;
+    border-radius:3px;
 }
 
 label {

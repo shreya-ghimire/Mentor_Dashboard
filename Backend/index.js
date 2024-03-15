@@ -87,6 +87,7 @@ app.post('/student', async (req, res) => {
 
 app.post('/evaluation', async (req, res) => {
   try {
+    // Call the function to add evaluation data for all students
     await addEvaluationDataForAllStudents();
 
     const { student_id, teacher_id, ideation, execution, viva_pitch, total_score, evaluation_locked } = req.body;
