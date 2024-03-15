@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const Teacher = require('./Model/mentorModel');
@@ -36,12 +35,11 @@ app.post('/mentor', async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     const mentor = new Teacher({
       name,
       email,
-      password: hashedPassword
+      password
     });
 
     await mentor.save();
