@@ -6,7 +6,7 @@ const SubmitProject = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    batch: '',
+    batch: '', 
     section: '',
     project: ''
   });
@@ -51,7 +51,13 @@ const SubmitProject = () => {
         </div>
         <div>
           <label>Batch:</label>
-          <input className="input-field-project" type="text" name="batch" value={formData.batch} onChange={handleChange} />
+          <select className="input-field-project" name="batch" value={formData.batch} onChange={handleChange}>
+            <option value="">Select Batch</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+          </select>
         </div>
         <div>
           <label>Section:</label>

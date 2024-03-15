@@ -12,6 +12,7 @@ const Evaluate = () => {
   const [projectUrl, setProjectUrl] = useState('');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [evaluationLocked, setEvaluationLocked] = useState(false);
   const [evaluationSaved, setEvaluationSaved] = useState(false);
   const [total_score, setTotalScore] = useState(0);
@@ -49,6 +50,27 @@ const Evaluate = () => {
 
   const handleViewProject = () => {
     window.open(projectUrl, '_blank');
+  };
+
+  const PdfEvaluation = async (studentEmail) => {
+    try {
+      const response = await axios.post('https://mentor-dashboard-1.onrender.com/evaluate', { email: studentEmail }, { responseType: 'arraybuffer' });
+
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'evaluation.pdf';
+      link.click();
+
+      // Cleanup
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      setErrorMessage('Error downloading evaluation. Please try again later.');
+      console.error('Error downloading evaluation:', error);
+    }
   };
 
   const handleSaveForm = async () => {
@@ -143,13 +165,13 @@ const Evaluate = () => {
         <input type="number" value={viva_pitch} onChange={(e) => handleInputChange(e, setVivaPitch)} disabled={evaluationLocked} /><br />
         <label>Total Score:</label>
         <input type="text" value={total_score} readOnly /><br />
-        <button type="button" className='button_evaluate'onClick={handleSaveForm}>Save</button>
+        <button type="button" className='button_evaluate' onClick={handleSaveForm}>Save</button>
         <button type="button" className='button_evaluate' onClick={() => handleLockForm(email)} disabled={evaluationLocked || !evaluationSaved}>Lock</button> 
       </form>
       {confirmationEmail && (
         <div className="confirmation-message">
           Email confirmation sent to: {confirmationEmail}<br />
-          <Link to="/home">Download Result</Link>
+          <button onClick={() => PdfEvaluation(email)}>Download Result</button>
         </div>
       )}
     </div>
