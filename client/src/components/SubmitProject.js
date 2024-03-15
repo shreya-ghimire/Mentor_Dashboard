@@ -1,8 +1,6 @@
-// SubmitProject.js
-
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../style/login.css'; // Import the CSS file
+import '../style/login.css'; 
 
 const SubmitProject = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +22,7 @@ const SubmitProject = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/student', formData);
+      await axios.post('https://mentor-dashboard-1.onrender.com/student', formData);
       alert('Project submitted successfully!');
       setFormData({
         name: '',
