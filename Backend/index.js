@@ -141,16 +141,14 @@ app.post('/evaluate', async (req, res) => {
     }
 
     if (evaluation.evaluation_locked) {
-      // Generate a unique file name (e.g., using timestamp)
+
       const fileName = `evaluation.pdf`;
 
-      // Construct the file path relative to the 'download' directory
+  
       const pdfFilePath = path.join(__dirname, fileName);
 
       // Generate the PDF with the specified file path
       const pdfData = await generateEvaluationPDF(student, evaluation, pdfFilePath);
-
-      // No need to call savePDFtoFile function here
 
       // Set content disposition to attachment to force download
       res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);

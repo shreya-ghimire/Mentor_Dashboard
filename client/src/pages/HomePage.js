@@ -24,7 +24,7 @@ const HomePage = () => {
   return (
     <div>
       {mentor && (
-        <div>
+        <div className='home_page'>
           <Navbar mentor={mentor} onLogout={handleLogout} />
           <StudentList mentor={mentor} />
         </div>

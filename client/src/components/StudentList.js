@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import '../style/homepage.css'; // Import the CSS file
+import '../style/homepage.css';
 
 const StudentList = ({ mentor }) => {
   const [students, setStudents] = useState([]);
@@ -67,7 +67,7 @@ const StudentList = ({ mentor }) => {
       );
     } else {
       return <div><p>{student.name}</p>
-      <p className='email_font'>{student.email}</p>
+        <p className='email_font'>{student.email}</p>
       </div>
     }
   };
@@ -104,6 +104,8 @@ const StudentList = ({ mentor }) => {
 
   const renderButtons = (student) => {
     const { evaluation } = student;
+    const assignedStudents = students.filter(student => student.evaluation && student.evaluation.teacher_id === mentor.mentor_id);
+
     if (!evaluation) {
       return (
         <>
@@ -117,14 +119,23 @@ const StudentList = ({ mentor }) => {
         </>
       );
     } else if (evaluation.teacher_id === mentor.mentor_id && !evaluation.evaluation_locked) {
-      return (
-        <>
-          <button onClick={() => handleRemoveStudent(student.student_id)}>Remove</button>
-          <Link className="student-link" to={`/evaluation/${student.student_id}`}>
-            <button>Evaluate</button>
-          </Link>
-        </>
-      );
+      if (assignedStudents.length >= 3) {
+        return (
+          <>
+            <button onClick={() => handleRemoveStudent(student.student_id)}>Remove</button>
+            <Link className="student-link" to={`/evaluation/${student.student_id}`}>
+              <button>Evaluate</button>
+            </Link>
+          </>
+        );
+      } else {
+        return (
+          <>
+            <button onClick={() => handleRemoveStudent(student.student_id)}>Remove</button>
+            <p className="locked-message">You need to add minimum 3 students</p>
+          </>
+        );
+      }
     } else if (evaluation.evaluation_locked) {
       return <p className="locked-message">Total score: {evaluation.total_score}</p>;
     } else if (evaluation.teacher_id !== mentor.mentor_id && evaluation.teacher_id !== 0) {
@@ -133,7 +144,6 @@ const StudentList = ({ mentor }) => {
       return null;
     }
   };
-
   const handleRemoveStudent = async (studentId) => {
     try {
       const requestBody = {

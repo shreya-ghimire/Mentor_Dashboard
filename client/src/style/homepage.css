@@ -130,12 +130,23 @@
 }
 
 @media only screen and (max-width: 768px) {
+  .home_page{
+    width: 100%;
+  }
   .container-studentList {
       flex-direction: column;
   }
-
+  .navbar-container{
+    padding: 10px;
+    width: 100%;
+  }
+  .logged-in-info {
+    display: none;
+  }
   .filter-container, .student-list-container {
       width: 100%;
+      padding: 20px;
+      border-right: none;
   }
   .img_list {
     display: none;
