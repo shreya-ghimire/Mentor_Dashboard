@@ -1,5 +1,6 @@
 .navbar-container {
-  background-color: #c7b09a;
+  background-color: #000000;
+  border-bottom: #ffd4ab 2px solid;
   padding: 10px 20px;
   display: flex;
   align-items: center;
@@ -7,26 +8,28 @@
 
 .title {
   margin-right: auto;
-  color: #664229;
+  color: #ffd5b8;
 }
 
 .logged-in-info {
   margin-right: 10px;
-  color: #987554;
+  color: #ffffff;
 }
 
 .logout-button {
-  background-color: #b99976;
-  color: white;
+  background-color: #fca311;
+  border: #ffd4ab 1 px solid;
+  color: black;
   border: none;
+  width: 200px;
   border-radius: 5px;
-  padding: 8px 16px;
+  padding: 10px 20px;
+  margin-right: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .logout-button:hover {
-  background-color: #987554;
+  background-color: #f5f5f5;
 }
 
 .container-studentList {
@@ -35,16 +38,17 @@
 
 .filter-container {
   width: 33%;
-  padding: 20px;
-  background-color: #e5d3b3;
+  padding: 30px;
+  background-color: rgb(37, 33, 33);
+  border-right: #ffd4ab 2px solid;
 }
 
 .filter-container button {
   display: block;
   width: 100%;
   margin-bottom: 10px;
-  background-color: #b99976;
-  color: white;
+  background-color: #fca311;
+  color: rgb(0, 0, 0);
   border: none;
   border-radius: 5px;
   padding: 10px;
@@ -53,25 +57,27 @@
 }
 
 .filter-container button:hover {
-  background-color: #987554;
+  background-color: white;
 }
 
 .student-list-container {
   flex: 1;
   padding: 20px;
-  background-color: #ffffff;
+  background-color: #050505;
 }
 
 .student {
+  background-color: #111111;
   margin-bottom: 10px;
-  border: black 1px solid;
+  border: rgb(254, 254, 254) 1px solid;
   padding: 5px;
 }
 
 .student-link {
   text-decoration: none;
-  color: #664229;
-  border: 1px black;
+  color: #fdfaf7;
+  border: 1px #ffd4ab;
+  margin-left: 5px;
 }
 
 .student-link:hover {
@@ -84,8 +90,9 @@
 
 .student-buttons button {
   margin-right: 10px;
-  background-color: #b99976;
-  color: white;
+  background-color:#fca311;
+  border: #ffd4ab 1 px solid;
+  color: black;
   border: none;
   border-radius: 5px;
   padding: 8px 16px;
@@ -94,22 +101,32 @@
 }
 
 .student-buttons button:hover {
-  background-color: #987554;
+  background-color: white;
 }
 
 .student-info {
   font-size: 24px;
   margin-right: auto;
-  color: #664229;
+  margin-left: 5px;
+  color: white;
 }
 
 .locked-message {
-  color: #987554;
+  color: #fca311;
   font-size: 16px;
 }
 
 .email_font {
   font-size: 15px;
+}
+.img_list {
+  display: block;
+  margin: 0 auto;
+  border-radius: 50%;
+  width: 300px;
+  height: 300px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 @media only screen and (max-width: 768px) {

@@ -1,13 +1,17 @@
+body{
+    background-color: rgb(37, 33, 33);
+}
 .container_login {
-  background-color: #e5d3b3;
   padding: 20px;
   border-radius: 10px;
   text-align: center;
+  align-items: center;
 }
 
 .button_login {
-  background-color: #b99976;
-  color: white;
+  background-color: #fca311;
+  border: #ffd4ab 1 px solid;
+  color: black;
   border: none;
   width: 300px;
   border-radius: 5px;
@@ -17,22 +21,34 @@
 }
 
 .container_login_div {
-  background-color: white;
   padding: 20px;
   text-align: center;
+  color: white;
+  align-items: center;
 }
 
 .button_login:hover {
-  background-color: #987554;
+  background-color: white;
+}
+.img_login {
+    display: block;
+    margin: 0 auto;
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 
+
 .form-container {
-  text-align: left;
+  text-align: center;
+  color: white;
 }
 
 .button_submit {
-  background-color: #b99976;
-  color: white;
+  background-color: #fca311;
+  color: black;
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
@@ -43,7 +59,7 @@
 }
 
 button:hover {
-  background-color: #987554;
+  background-color: white;
 }
 
 .error-message {

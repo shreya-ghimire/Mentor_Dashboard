@@ -34,6 +34,7 @@ function DownloadEvaluation() {
   return (
     <div className="'container_login_div'">
       <form onSubmit={handleFormSubmit}>
+        <div className='form-container'>
         <div className="form-group">
           <label>Email:</label>
           <input 
@@ -45,6 +46,7 @@ function DownloadEvaluation() {
           />
         </div>
         <button className="button_submit" type="submit">Download Evaluation</button>
+        </div>
       </form>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
