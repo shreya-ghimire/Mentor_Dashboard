@@ -6,6 +6,7 @@ The Mentor Dashboard project is built with the MERN stack and provides a compreh
 
 - **React App**: [Mentor Dashboard Client](https://mentor-dashboard-client-final.onrender.com/)
 - **Backend Server**: [Mentor Dashboard Backend](https://mentor-dashboard-1.onrender.com/mentor)
+  //backend server may go to sleep from time to time.
 
 ## Features
 
