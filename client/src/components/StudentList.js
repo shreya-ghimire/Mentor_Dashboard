@@ -62,10 +62,13 @@ const StudentList = ({ mentor }) => {
       return (
         <Link className="student-link" to={`/evaluation/${student.student_id}`}>
           <p>{student.name}</p>
+          <p className='email_font'>{student.email}</p>
         </Link>
       );
     } else {
-      return <p>{student.name}</p>;
+      return <div><p>{student.name}</p>
+      <p className='email_font'>{student.email}</p>
+      </div>
     }
   };
 
