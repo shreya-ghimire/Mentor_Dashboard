@@ -1,13 +1,15 @@
+
 import React from 'react';
+import '../style/homepage.css'; 
 
 const Navbar = ({ mentor, onLogout }) => {
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <h1 style={{ marginRight: 'auto' }}>Dashboard</h1>
+    <div className="navbar-container">
+      <h1 className="title">Dashboard</h1>
       {mentor && (
         <>
-          <p style={{ marginRight: '10px' }}>Logged in as {mentor.name}</p>
-          <button onClick={onLogout}>Logout</button>
+          <p className="logged-in-info">Logged in as {mentor.name}</p>
+          <button className="logout-button" onClick={onLogout}>Logout</button>
         </>
       )}
     </div>

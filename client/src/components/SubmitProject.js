@@ -1,5 +1,8 @@
+// SubmitProject.js
+
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../style/login.css'; // Import the CSS file
 
 const SubmitProject = () => {
   const [formData, setFormData] = useState({
@@ -37,30 +40,30 @@ const SubmitProject = () => {
   };
 
   return (
-    <div>
+    <div className='container_login_div'>
       <h2>Submit Project</h2>
-      <form onSubmit={handleSubmit}>
+      <form className="form-container" onSubmit={handleSubmit}>
         <div>
           <label>Name:</label>
-          <input type="text" name="name" value={formData.name} onChange={handleChange} />
+          <input className="input-field-project" type="text" name="name" value={formData.name} onChange={handleChange} />
         </div>
         <div>
           <label>Email:</label>
-          <input type="email" name="email" value={formData.email} onChange={handleChange} />
+          <input className="input-field-project" type="email" name="email" value={formData.email} onChange={handleChange} />
         </div>
         <div>
           <label>Batch:</label>
-          <input type="text" name="batch" value={formData.batch} onChange={handleChange} />
+          <input className="input-field-project" type="text" name="batch" value={formData.batch} onChange={handleChange} />
         </div>
         <div>
           <label>Section:</label>
-          <input type="text" name="section" value={formData.section} onChange={handleChange} />
+          <input className="input-field-project" type="text" name="section" value={formData.section} onChange={handleChange} />
         </div>
         <div>
           <label>Project URL:</label>
-          <input type="text" name="project" value={formData.project} onChange={handleChange} />
+          <input className="input-field-project" type="text" name="project" value={formData.project} onChange={handleChange} />
         </div>
-        <button type="submit">Submit</button>
+        <button className="button_submit" type="submit">Submit</button>
       </form>
     </div>
   );
