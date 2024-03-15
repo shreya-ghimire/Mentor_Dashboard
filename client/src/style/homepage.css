@@ -137,4 +137,8 @@
   .filter-container, .student-list-container {
       width: 100%;
   }
+  .img_list {
+    display: none;
+ 
+  }
 }
