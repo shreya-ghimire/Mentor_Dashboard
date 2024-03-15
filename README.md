@@ -45,4 +45,19 @@ This guide will walk you through setting up the frontend server for the Mentor D
 3. Start the server
    ```bash
    npm start
-##Output:
+<h2>Output:</h2>
+![Screenshot 2024-03-15 213253](https://github.com/shreya-ghimire/Mentor_Dashboard/assets/140148528/54cc650c-e875-4eba-96f1-6ada78cd3765)
+![Screenshot 2024-03-15 213303](https://github.com/shreya-ghimire/Mentor_Dashboard/assets/140148528/944823d3-b0f0-4f72-943b-08f4dea9a2b9)
+![Screenshot 2024-03-15 213319](https://github.com/shreya-ghimire/Mentor_Dashboard/assets/140148528/27a3e1b6-fe80-470a-bd92-ade5af357969)
+![Screenshot 2024-03-15 213334](https://github.com/shreya-ghimire/Mentor_Dashboard/assets/140148528/37b7ce20-8dbb-426c-a9ba-fa6d8554b548)
+![Screenshot 2024-03-15 213345](https://github.com/shreya-ghimire/Mentor_Dashboard/assets/140148528/4af12abd-c717-4b52-a451-0255cc701dff)
+
+
+
+
+
+
+
+
+
+
