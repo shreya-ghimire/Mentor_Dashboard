@@ -11,6 +11,7 @@ const Evaluate = () => {
   const [viva_pitch, setVivaPitch] = useState(0);
   const [projectUrl, setProjectUrl] = useState('');
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [evaluationLocked, setEvaluationLocked] = useState(false);
   const [evaluationSaved, setEvaluationSaved] = useState(false);
   const [total_score, setTotalScore] = useState(0);
@@ -28,6 +29,7 @@ const Evaluate = () => {
       if (studentData) {
         setProjectUrl(studentData.project);
         setEmail(studentData.email);
+        setName(studentData.name);
       }
 
       // Fetch evaluation details
@@ -127,8 +129,10 @@ const Evaluate = () => {
 
   return (
     <div className="container">
-      <h1>Evaluation Page</h1>
+      <h1>EVALUATION PAGE</h1>
       <p className='student_id_text'>Student ID: {student_id}</p>
+      <p className='student_id_text'>Student Name: {name}</p>
+      <p className='student_id_text'>Student Email: {email}</p>
       <button onClick={handleViewProject} className='view_btn'>View Project</button>
       <form className='form_evaluate'>
         <label>Ideation:</label>
@@ -139,10 +143,8 @@ const Evaluate = () => {
         <input type="number" value={viva_pitch} onChange={(e) => handleInputChange(e, setVivaPitch)} disabled={evaluationLocked} /><br />
         <label>Total Score:</label>
         <input type="text" value={total_score} readOnly /><br />
-        <div className="buttons-container">
-          <button type="button" className='button_evaluate'onClick={handleSaveForm}>Save</button>
-          <button type="button" className='button_evaluate' onClick={() => handleLockForm(email)} disabled={evaluationLocked || !evaluationSaved}>Lock</button>
-        </div>
+        <button type="button" className='button_evaluate'onClick={handleSaveForm}>Save</button>
+        <button type="button" className='button_evaluate' onClick={() => handleLockForm(email)} disabled={evaluationLocked || !evaluationSaved}>Lock</button> 
       </form>
       {confirmationEmail && (
         <div className="confirmation-message">

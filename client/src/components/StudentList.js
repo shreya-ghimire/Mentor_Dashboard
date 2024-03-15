@@ -157,6 +157,7 @@ const StudentList = ({ mentor }) => {
         <button onClick={() => handleFilterChange('locked')}>Already Evaluated Students</button>
         <button onClick={() => handleFilterChange('notEvaluated')}>Assigned but not evaluated</button>
         <button onClick={() => handleFilterChange('notAssigned')}>Yet to Assigned Students</button>
+        <img className="img_list" src="https://img.freepik.com/free-vector/workflow-infographic_24908-59249.jpg?t=st=1710493939~exp=1710497539~hmac=9052e95c333b4bc7dcfc20fc0e85d5cc0adbd77e5398f18a17c964222ce9817f&w=740" alt="" />
       </div>
       <div className="student-list-container">
         {renderStudentList()}
