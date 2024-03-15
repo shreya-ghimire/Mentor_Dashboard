@@ -1,0 +1,58 @@
+/* evaluate.css */
+
+.container {
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5e5c3;
+    border: 1px solid #b99976;
+    border-radius: 5px;
+    align-items: center;
+}
+
+h1 {
+    color: #664229;
+    margin-bottom: 10px;
+}
+
+.student_id_text {
+    color: #664229;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.view_btn {
+    width: 80%; 
+    height: 50px; 
+    font-size: 16px; 
+    align-self: center;
+}
+
+.button_evaluate {
+    display: block;
+    width: 100%;
+    background-color: #b99976;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #987554;
+}
+
+.form_evaluate {
+    margin-top: 20px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../style/login.css'; // Import the CSS file
 
 function DownloadEvaluation() {
   const [email, setEmail] = useState('');
@@ -33,20 +34,21 @@ function DownloadEvaluation() {
   };
   
   return (
-    <div>
+    <div className="'container_login_div'">
       <form onSubmit={handleFormSubmit}>
-        <label>
-          Enter your email:
+        <div className="form-group">
+          <label>Email:</label>
           <input 
+            className="input-field"
             type="email" 
             value={email} 
             onChange={(event) => setEmail(event.target.value)} 
             required 
           />
-        </label>
-        <button type="submit">Download Evaluation</button>
+        </div>
+        <button className="button_submit" type="submit">Download Evaluation</button>
       </form>
-      {errorMessage && <p>{errorMessage}</p>}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 }

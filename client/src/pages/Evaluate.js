@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import '../style/evaluate.css'; 
 
 const Evaluate = () => {
   const { student_id } = useParams();
@@ -12,6 +14,7 @@ const Evaluate = () => {
   const [evaluationLocked, setEvaluationLocked] = useState(false);
   const [evaluationSaved, setEvaluationSaved] = useState(false);
   const [total_score, setTotalScore] = useState(0);
+  const [confirmationEmail, setConfirmationEmail] = useState('');
 
   useEffect(() => {
     fetchData();
@@ -48,7 +51,6 @@ const Evaluate = () => {
 
   const handleSaveForm = async () => {
     try {
-      // Update evaluation
       await axios.put(`http://localhost:5000/evaluation/update/`, {
         student_id,
         ideation,
@@ -64,7 +66,6 @@ const Evaluate = () => {
     }
   };
   
-  
   const handleLockForm = async (studentEmail) => {
     // Check if the form has been saved
     if (!evaluationSaved) {
@@ -73,13 +74,15 @@ const Evaluate = () => {
     }
   
     // Check if any evaluation criteria is set to 0 or unassigned
-    if (ideation === 0 || execution === 0 || viva_pitch === 0) {
+    if (ideation === '' || execution === '' || viva_pitch === '') {
       alert('Form cannot be locked if any evaluation criteria is set to 0 or unassigned.');
       return;
     }
   
     // If all conditions are met, lock the form
+    
     setEvaluationLocked(true);
+    setConfirmationEmail(studentEmail);
   
     try {
       // Update evaluation with the new locked status
@@ -97,13 +100,15 @@ const Evaluate = () => {
         studentEmail: studentEmail,
         totalScore: total_score
       });
+
+      // Set confirmation email
+      
   
       console.log('Evaluation form locked.');
     } catch (error) {
       console.error('Error locking form:', error);
     }
   };
-  
   
 
   // Calculate total score
@@ -121,11 +126,11 @@ const Evaluate = () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <h1>Evaluation Page</h1>
-      <p>Student ID: {student_id}</p>
-      <button onClick={handleViewProject}>View Project</button>
-      <form>
+      <p className='student_id_text'>Student ID: {student_id}</p>
+      <button onClick={handleViewProject} className='view_btn'>View Project</button>
+      <form className='form_evaluate'>
         <label>Ideation:</label>
         <input type="number" value={ideation} onChange={(e) => handleInputChange(e, setIdeation)} disabled={evaluationLocked} /><br />
         <label>Execution:</label>
@@ -134,10 +139,17 @@ const Evaluate = () => {
         <input type="number" value={viva_pitch} onChange={(e) => handleInputChange(e, setVivaPitch)} disabled={evaluationLocked} /><br />
         <label>Total Score:</label>
         <input type="text" value={total_score} readOnly /><br />
-        <button type="button" onClick={handleSaveForm}>Save</button>
-        <button type="button" onClick={() => handleLockForm(email)} disabled={evaluationLocked || !evaluationSaved}>Lock</button>
-
+        <div className="buttons-container">
+          <button type="button" className='button_evaluate'onClick={handleSaveForm}>Save</button>
+          <button type="button" className='button_evaluate' onClick={() => handleLockForm(email)} disabled={evaluationLocked || !evaluationSaved}>Lock</button>
+        </div>
       </form>
+      {confirmationEmail && (
+        <div className="confirmation-message">
+          Email confirmation sent to: {confirmationEmail}<br />
+          <Link to="/home">Download Result</Link>
+        </div>
+      )}
     </div>
   );
 };

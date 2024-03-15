@@ -2,9 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import HomePage from './pages/HomePage';
-import SubmitProject from './pages/SubmitProject';
+import SubmitProject from './components/SubmitProject';
 import Evaluate from './pages/Evaluate';
-import DownloadEvaluation from './pages/DownloadEvaluation';
+import DownloadEvaluation from './components/DownloadEvaluation';
 
 const App = () => {
   return (
@@ -12,9 +12,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<HomePage />} />
-        <Route path="/submit-project" element={<SubmitProject />} />
         <Route path="/evaluation/:student_id" element={<Evaluate />} /> 
-        <Route path="/download-evaluation" element={<DownloadEvaluation />} />
       </Routes>
     </Router>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import '../style/homepage.css'; // Import the CSS file
 
 const StudentList = ({ mentor }) => {
   const [students, setStudents] = useState([]);
@@ -40,14 +41,18 @@ const StudentList = ({ mentor }) => {
       filteredStudents = students.filter(student => student.evaluation && student.evaluation.teacher_id === mentor.mentor_id);
     } else if (filter === 'locked') {
       filteredStudents = students.filter(student => student.evaluation && student.evaluation.evaluation_locked);
+    } else if (filter === 'notEvaluated') {
+      filteredStudents = students.filter(student => student.evaluation && student.evaluation.teacher_id !== 0 && !student.evaluation.evaluation_locked);
+    } else if (filter === 'notAssigned') {
+      filteredStudents = students.filter(student => !student.evaluation || student.evaluation.teacher_id === 0);
     }
 
     return filteredStudents.map(student => (
-      <div key={student.student_id}>
-        {/* Render student name or link based on mentor assignment */}
-        {renderStudentLink(student)}
-        {/* Render buttons based on evaluation status */}
-        {renderButtons(student)}
+      <div className="student" key={student.student_id}>
+        <div className="student-info">
+          {renderStudentLink(student)}
+        </div>
+        <div className="student-buttons">{renderButtons(student)}</div>
       </div>
     ));
   };
@@ -55,16 +60,12 @@ const StudentList = ({ mentor }) => {
   const renderStudentLink = (student) => {
     if (mentorAssignedToStudent(student)) {
       return (
-        <Link to={`/evaluation/${student.student_id}`}>
+        <Link className="student-link" to={`/evaluation/${student.student_id}`}>
           <p>{student.name}</p>
         </Link>
       );
     } else {
-      return (
-        <div>
-          <p>{student.name}</p>
-        </div>
-      );
+      return <p>{student.name}</p>;
     }
   };
 
@@ -116,15 +117,15 @@ const StudentList = ({ mentor }) => {
       return (
         <>
           <button onClick={() => handleRemoveStudent(student.student_id)}>Remove</button>
-          <Link to={`/evaluation/${student.student_id}`}>
+          <Link className="student-link" to={`/evaluation/${student.student_id}`}>
             <button>Evaluate</button>
           </Link>
         </>
       );
-    } else if (evaluation.teacher_id !== mentor.mentor_id && evaluation.teacher_id !== 0) {
-      return <p>Unavailable</p>;
     } else if (evaluation.evaluation_locked) {
-      return <p>Total marks: {evaluation.total_score}</p>;
+      return <p className="locked-message">Total score: {evaluation.total_score}</p>;
+    } else if (evaluation.teacher_id !== mentor.mentor_id && evaluation.teacher_id !== 0) {
+      return <p className="locked-message">Unavailable</p>;
     } else {
       return null;
     }
@@ -146,13 +147,17 @@ const StudentList = ({ mentor }) => {
   };
 
   return (
-    <div>
-      <div>
+    <div className="container-studentList">
+      <div className="filter-container">
         <button onClick={() => handleFilterChange('all')}>All Students</button>
         <button onClick={() => handleFilterChange('assigned')}>Your Students</button>
-        <button onClick={() => handleFilterChange('locked')}>Locked Students</button>
+        <button onClick={() => handleFilterChange('locked')}>Already Evaluated Students</button>
+        <button onClick={() => handleFilterChange('notEvaluated')}>Assigned but not evaluated</button>
+        <button onClick={() => handleFilterChange('notAssigned')}>Yet to Assigned Students</button>
       </div>
-      {renderStudentList()}
+      <div className="student-list-container">
+        {renderStudentList()}
+      </div>
     </div>
   );
 };
