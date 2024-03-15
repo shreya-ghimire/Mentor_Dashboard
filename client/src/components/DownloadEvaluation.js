@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../style/login.css'; // Import the CSS file
+import '../style/login.css'; 
 
 function DownloadEvaluation() {
   const [email, setEmail] = useState('');
@@ -10,19 +10,17 @@ function DownloadEvaluation() {
     event.preventDefault();
     
     try {
-      // Call the /evaluate endpoint
-      const response = await axios.post('http://localhost:5000/evaluate', { email }, { responseType: 'arraybuffer' });
-      
-      // Create a blob from the response data
+      const response = await axios.post('https://mentor-dashboard-1.onrender.com/evaluate', { email }, { responseType: 'arraybuffer' });
+
       const blob = new Blob([response.data], { type: 'application/pdf' });
       
-      // Create a URL for the blob
+
       const url = window.URL.createObjectURL(blob);
       
-      // Create a link element
+
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'evaluation.pdf'; // Set the filename for download
+      link.download = 'evaluation.pdf'; 
       link.click();
       
       // Cleanup

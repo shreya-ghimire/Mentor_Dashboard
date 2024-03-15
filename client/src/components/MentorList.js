@@ -12,7 +12,7 @@ function MentorList() {
 
   const fetchMentors = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/mentor');
+      const response = await axios.get('https://mentor-dashboard-1.onrender.com/mentor');
       setMentors(response.data);
     } catch (error) {
       console.error('Error fetching mentors:', error);

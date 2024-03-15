@@ -1,67 +1,71 @@
 .container_login {
-    background-color: #e5d3b3;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center; 
-  }
-  
- 
+  background-color: #e5d3b3;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.button_login {
+  background-color: #b99976;
+  color: white;
+  border: none;
+  width: 300px;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.container_login_div {
+  background-color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.button_login:hover {
+  background-color: #987554;
+}
+
+.form-container {
+  text-align: left;
+}
+
+.button_submit {
+  background-color: #b99976;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+  margin-right: 5px;
+}
+
+button:hover {
+  background-color: #987554;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+.mentor_div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media only screen and (max-width: 768px) {
   .button_login {
-    background-color: #b99976;
-    color: white;
-    border: none;
-    width: 300px;
-    border-radius: 5px;
-    padding: 10px 20px;
-    margin-right: 10px;
-    cursor: pointer;
-    
-  }
-  .container_login_div{
-    background-color:white;
-    padding: 20px;
-    text-align: centre; 
-  }
-  
-  .button_login:hover {
-    background-color: #987554;
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 10px;
   }
 
-  .form-container {
-    text-align: left; 
-  }
-
-  /* form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  } */
-  
   .button_submit {
-    background-color: #b99976;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
-    margin-right: 5px;
-
+      width: 100%;
+      margin-right: 0;
   }
-  
-  button:hover {
-    background-color: #987554;
-  }
-  
-  .error-message {
-    color: red;
-    margin-top: 10px;
-  }
-
-  .mentor_div{
-    display: 'flex';
-    flex-wrap: 'wrap';
-    gap: 10px;
-  }
-    
+}

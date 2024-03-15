@@ -23,7 +23,7 @@ const Evaluate = () => {
   const fetchData = async () => {
     try {
       // Fetch student details
-      const studentResponse = await axios.get('http://localhost:5000/student');
+      const studentResponse = await axios.get('https://mentor-dashboard-1.onrender.com/student');
       const studentData = studentResponse.data.find(student => student.student_id === parseInt(student_id));
       if (studentData) {
         setProjectUrl(studentData.project);
@@ -31,7 +31,7 @@ const Evaluate = () => {
       }
 
       // Fetch evaluation details
-      const evaluationResponse = await axios.get('http://localhost:5000/evaluation');
+      const evaluationResponse = await axios.get('https://mentor-dashboard-1.onrender.com/evaluation');
       const evaluationData = evaluationResponse.data.find(evaluation => evaluation.student_id === parseInt(student_id));
       if (evaluationData) {
         setIdeation(evaluationData.ideation);
@@ -51,7 +51,7 @@ const Evaluate = () => {
 
   const handleSaveForm = async () => {
     try {
-      await axios.put(`http://localhost:5000/evaluation/update/`, {
+      await axios.put(`https://mentor-dashboard-1.onrender.com/evaluation/update/`, {
         student_id,
         ideation,
         execution,
@@ -74,7 +74,7 @@ const Evaluate = () => {
     }
   
     // Check if any evaluation criteria is set to 0 or unassigned
-    if (ideation === '' || execution === '' || viva_pitch === '') {
+    if (ideation === '' || execution === '' || viva_pitch === '' || ideation === 0 || execution === 0 || viva_pitch === 0 ) {
       alert('Form cannot be locked if any evaluation criteria is set to 0 or unassigned.');
       return;
     }
@@ -86,7 +86,7 @@ const Evaluate = () => {
   
     try {
       // Update evaluation with the new locked status
-      await axios.put(`http://localhost:5000/evaluation/update/`, {
+      await axios.put(`https://mentor-dashboard-1.onrender.com/evaluation/update/`, {
         student_id,
         ideation,
         execution,
@@ -96,7 +96,7 @@ const Evaluate = () => {
       });
       
       // Call the backend endpoint to send email
-      await axios.post(`http://localhost:5000/send-email`, {
+      await axios.post(`https://mentor-dashboard-1.onrender.com/send-email`, {
         studentEmail: studentEmail,
         totalScore: total_score
       });

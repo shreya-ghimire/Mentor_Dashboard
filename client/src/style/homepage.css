@@ -1,114 +1,123 @@
 .navbar-container {
-    background-color: #c7b09a;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-  }
-  
-  .title {
-    margin-right: auto;
-    color: #664229;
-  }
-  
-  .logged-in-info {
-    margin-right: 10px;
-    color: #987554;
-  }
-  
-  .logout-button {
-    background-color: #b99976;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .logout-button:hover {
-    background-color: #987554;
-  }
+  background-color: #c7b09a;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  margin-right: auto;
+  color: #664229;
+}
+
+.logged-in-info {
+  margin-right: 10px;
+  color: #987554;
+}
+
+.logout-button {
+  background-color: #b99976;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #987554;
+}
 
 .container-studentList {
-    display: flex;
+  display: flex;
+}
+
+.filter-container {
+  width: 33%;
+  padding: 20px;
+  background-color: #e5d3b3;
+}
+
+.filter-container button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  background-color: #b99976;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filter-container button:hover {
+  background-color: #987554;
+}
+
+.student-list-container {
+  flex: 1;
+  padding: 20px;
+  background-color: #ffffff;
+}
+
+.student {
+  margin-bottom: 10px;
+  border: black 1px solid;
+  padding: 5px;
+}
+
+.student-link {
+  text-decoration: none;
+  color: #664229;
+  border: 1px black;
+}
+
+.student-link:hover {
+  text-decoration: underline;
+}
+
+.student-buttons {
+  display: flex;
+}
+
+.student-buttons button {
+  margin-right: 10px;
+  background-color: #b99976;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.student-buttons button:hover {
+  background-color: #987554;
+}
+
+.student-info {
+  font-size: 24px;
+  margin-right: auto;
+  color: #664229;
+}
+
+.locked-message {
+  color: #987554;
+  font-size: 16px;
+}
+
+.email_font {
+  font-size: 15px;
+}
+
+@media only screen and (max-width: 768px) {
+  .container-studentList {
+      flex-direction: column;
   }
-  
-  .filter-container {
-    width: 33%;
-    padding: 20px;
-    background-color: #e5d3b3;
+
+  .filter-container, .student-list-container {
+      width: 100%;
   }
-  
-  .filter-container button {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-    background-color: #b99976;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .filter-container button:hover {
-    background-color: #987554;
-  }
-  
-  .student-list-container {
-    flex: 1;
-    padding: 20px;
-    background-color: #ffffff;
-  }
-  
-  .student {
-    margin-bottom: 10px;
-    border: black 1px solid;
-    padding: 5px;
-    
-  }
-  
-  .student-link {
-    text-decoration: none;
-    color: #664229;
-    border: 1px black;
-  }
-  
-  .student-link:hover {
-    text-decoration: underline;
-  }
-  
-  .student-buttons {
-    display: flex;
-  }
-  
-  .student-buttons button {
-    margin-right: 10px;
-    background-color: #b99976;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .student-buttons button:hover {
-    background-color: #987554;
-  }
-  
-  .student-info {
-    font-size: 24px;
-    margin-right: auto;
-    color: #664229;
-  }
-  
-  .locked-message {
-    color: #987554;
-    font-size: 16px;
-  }
-  
-  .email_font{
-    font-size: 15px;
-  }
+}

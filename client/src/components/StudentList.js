@@ -13,8 +13,8 @@ const StudentList = ({ mentor }) => {
 
   const fetchStudents = async () => {
     try {
-      const studentsResponse = await axios.get('http://localhost:5000/student');
-      const evaluationsResponse = await axios.get('http://localhost:5000/evaluation');
+      const studentsResponse = await axios.get('https://mentor-dashboard-1.onrender.com/student');
+      const evaluationsResponse = await axios.get('https://mentor-dashboard-1.onrender.com/evaluation');
 
       const studentsData = studentsResponse.data;
       const evaluationsData = evaluationsResponse.data;
@@ -78,7 +78,7 @@ const StudentList = ({ mentor }) => {
 
   const handleAssignStudent = async (studentId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/evaluation?teacher_id=${mentor.mentor_id}`);
+      const response = await axios.get(`https://mentor-dashboard-1.onrender.com/evaluation?teacher_id=${mentor.mentor_id}`);
       const assignedStudents = response.data.filter(evaluation => evaluation.teacher_id === mentor.mentor_id);
 
       if (assignedStudents.length < 3) {
@@ -94,7 +94,7 @@ const StudentList = ({ mentor }) => {
         teacher_id: mentor.mentor_id
       };
 
-      await axios.put('http://localhost:5000/evaluation/assign', requestBody);
+      await axios.put('https://mentor-dashboard-1.onrender.com/evaluation/assign', requestBody);
 
       fetchStudents();
     } catch (error) {
@@ -141,7 +141,7 @@ const StudentList = ({ mentor }) => {
         teacher_id: 0
       };
 
-      await axios.put('http://localhost:5000/evaluation/assign', requestBody);
+      await axios.put('https://mentor-dashboard-1.onrender.com/evaluation/assign', requestBody);
 
       fetchStudents();
     } catch (error) {
